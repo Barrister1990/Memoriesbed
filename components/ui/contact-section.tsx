@@ -282,7 +282,7 @@ export function ContactSection() {
               >
                 <span className="text-gray-400">Developed by</span>
                 <a
-                  href="https://charlessawuku.com"
+                  href="https://charlesawuku.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-purple-300 hover:text-purple-200 font-medium flex items-center space-x-1 transition-colors duration-200"

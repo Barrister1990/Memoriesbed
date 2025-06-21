@@ -42,10 +42,7 @@ const contactMethods = [
 ];
 
 const socialLinks = [
-  { name: 'Facebook', href: '#facebook' },
-  { name: 'Twitter', href: '#twitter' },
-  { name: 'Instagram', href: '#instagram' },
-  { name: 'LinkedIn', href: '#linkedin' },
+  { name: 'Admin Login', href: '/admin/dashboard' },
 ];
 
 export function ContactSection() {
@@ -219,7 +216,7 @@ export function ContactSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h4 className="text-lg font-semibold mb-4">Follow Us</h4>
+              <h4 className="text-lg font-semibold mb-4">Go to dashboard </h4>
               <ul className="space-y-2">
                 {socialLinks.map((link) => (
                   <li key={link.name}>

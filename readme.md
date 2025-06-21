@@ -105,7 +105,7 @@ Memories Bed is a comprehensive digital memorial platform that allows clients to
 ### Backend
 - **API**: Next.js API Routes
 - **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: NextAuth.js
+- **Authentication**: Supabase
 - **File Storage**: Cloudinary
 - **Email**: Nodemailer
 

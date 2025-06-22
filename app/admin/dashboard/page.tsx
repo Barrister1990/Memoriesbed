@@ -1,26 +1,24 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  FolderPlus, 
-  Upload, 
-  Eye, 
-  MessageSquare, 
-  Download, 
-  TrendingUp,
-  Calendar,
-  Users,
-  Heart,
-  BarChart3,
-  Activity,
-  Clock
-} from 'lucide-react';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/lib/store';
+import { supabase } from '@/lib/supabase';
+import { motion } from 'framer-motion';
+import {
+  Activity,
+  BarChart3,
+  Calendar,
+  Clock,
+  Eye,
+  FolderPlus,
+  Heart,
+  MessageSquare,
+  TrendingUp,
+  Upload
+} from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 interface DashboardStats {
   totalFolders: number;
@@ -170,20 +168,6 @@ export default function AdminDashboard() {
       href: '/admin/folders',
       icon: Eye,
       color: 'from-blue-600 to-cyan-600',
-    },
-    {
-      title: 'Upload Memory (Legacy)',
-      description: 'Use the legacy upload system',
-      href: '/admin/upload',
-      icon: Upload,
-      color: 'from-green-600 to-emerald-600',
-    },
-    {
-      title: 'Manage Uploads (Legacy)',
-      description: 'View legacy memory uploads',
-      href: '/admin/manage',
-      icon: BarChart3,
-      color: 'from-orange-600 to-red-600',
     },
   ];
 

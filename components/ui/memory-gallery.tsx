@@ -17,6 +17,16 @@ export function MemoryGallery({ media, allowDownloads, title }: MemoryGalleryPro
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState<{[key: string]: boolean}>({});
   const videoRefs = useRef<{[key: string]: HTMLVideoElement | null}>({});
+  
+  // Touch/swipe state
+  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
+  const [touchEnd, setTouchEnd] = useState<{ x: number; y: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [swipeOffset, setSwipeOffset] = useState(0);
+  const lightboxRef = useRef<HTMLDivElement>(null);
+
+  // Minimum swipe distance to trigger navigation
+  const minSwipeDistance = 50;
 
   const handleKeyPress = (e: KeyboardEvent) => {
     if (selectedIndex === null) return;
@@ -47,6 +57,7 @@ export function MemoryGallery({ media, allowDownloads, title }: MemoryGalleryPro
       newIndex = selectedIndex === media.length - 1 ? 0 : selectedIndex + 1;
     }
     setSelectedIndex(newIndex);
+    setSwipeOffset(0); // Reset swipe offset when navigating
   };
 
   const handleDownload = async (url: string, filename: string) => {
@@ -64,6 +75,64 @@ export function MemoryGallery({ media, allowDownloads, title }: MemoryGalleryPro
     } catch (error) {
       console.error('Download failed:', error);
     }
+  };
+
+  // Touch event handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart({
+      x: e.targetTouches[0].clientX,
+      y: e.targetTouches[0].clientY
+    });
+    setIsDragging(false);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStart) return;
+    
+    const currentTouch = {
+      x: e.targetTouches[0].clientX,
+      y: e.targetTouches[0].clientY
+    };
+    
+    const deltaX = currentTouch.x - touchStart.x;
+    const deltaY = Math.abs(currentTouch.y - touchStart.y);
+    
+    // Only handle horizontal swipes (ignore vertical scrolling)
+    if (Math.abs(deltaX) > deltaY && Math.abs(deltaX) > 10) {
+      setIsDragging(true);
+      setSwipeOffset(deltaX);
+      // Prevent default to stop page scrolling
+      e.preventDefault();
+    }
+    
+    setTouchEnd(currentTouch);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const deltaX = touchStart.x - touchEnd.x;
+    const deltaY = Math.abs(touchStart.y - touchEnd.y);
+    
+    // Only trigger navigation if it's primarily a horizontal swipe
+    if (Math.abs(deltaX) > deltaY && Math.abs(deltaX) > minSwipeDistance) {
+      if (deltaX > 0) {
+        // Swiped left - go to next
+        navigateGallery('next');
+      } else {
+        // Swiped right - go to previous
+        navigateGallery('prev');
+      }
+    } else {
+      // Reset offset if swipe wasn't strong enough
+      setSwipeOffset(0);
+    }
+    
+    setTouchStart(null);
+    setTouchEnd(null);
+    setIsDragging(false);
+    setTimeout(() => setSwipeOffset(0), 300); // Reset with animation
   };
 
   return (
@@ -123,7 +192,13 @@ export function MemoryGallery({ media, allowDownloads, title }: MemoryGalleryPro
 
       {/* Lightbox Modal */}
       {selectedIndex !== null && (
-        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm">
+        <div 
+          ref={lightboxRef}
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           {/* Close Button */}
           <button
             onClick={() => setSelectedIndex(null)}
@@ -149,16 +224,23 @@ export function MemoryGallery({ media, allowDownloads, title }: MemoryGalleryPro
             <ChevronRight className="w-6 h-6 lg:w-7 lg:h-7" />
           </button>
 
-          {/* Media Container */}
+          {/* Media Container with Swipe Transform */}
           <div 
             className="flex items-center justify-center h-full p-4 sm:p-6 lg:p-8"
-            onClick={() => setSelectedIndex(null)}
+            onClick={(e) => {
+              // Only close if not dragging and clicked on background
+              if (!isDragging && e.target === e.currentTarget) {
+                setSelectedIndex(null);
+              }
+            }}
           >
             <div 
-              className="relative max-w-full max-h-full"
+              className="relative max-w-full max-h-full transition-transform duration-300 ease-out"
               onClick={(e) => e.stopPropagation()}
               style={{
-                animation: 'scaleIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both'
+                animation: swipeOffset === 0 ? 'scaleIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both' : 'none',
+                transform: `translateX(${swipeOffset * 0.3}px) scale(${1 - Math.abs(swipeOffset) * 0.0005})`,
+                opacity: 1 - Math.abs(swipeOffset) * 0.001
               }}
             >
               {media[selectedIndex].type === 'image' ? (
@@ -166,6 +248,7 @@ export function MemoryGallery({ media, allowDownloads, title }: MemoryGalleryPro
                   src={media[selectedIndex].url}
                   alt={`${title} - Image ${selectedIndex + 1}`}
                   className="max-w-full max-h-full object-contain rounded-lg sm:rounded-xl shadow-2xl"
+                  draggable={false}
                 />
               ) : (
                 <video
@@ -179,7 +262,7 @@ export function MemoryGallery({ media, allowDownloads, title }: MemoryGalleryPro
           </div>
 
           {/* Mobile Navigation Dots */}
-          <div className="sm:hidden absolute bottom-20 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          <div className="sm:hidden absolute bottom-20 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
             {media.map((_, index) => (
               <button
                 key={index}
@@ -191,17 +274,18 @@ export function MemoryGallery({ media, allowDownloads, title }: MemoryGalleryPro
             ))}
           </div>
 
-          {/* Mobile Swipe Navigation Area */}
-          <div className="sm:hidden absolute inset-0 flex">
-            <div 
-              className="w-1/2 h-full"
-              onClick={() => navigateGallery('prev')}
-            />
-            <div 
-              className="w-1/2 h-full"
-              onClick={() => navigateGallery('next')}
-            />
-          </div>
+          {/* Swipe Indicator */}
+          {isDragging && Math.abs(swipeOffset) > 20 && (
+            <div className="sm:hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none">
+              <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                {swipeOffset > 0 ? (
+                  <ChevronLeft className="w-6 h-6 text-white" />
+                ) : (
+                  <ChevronRight className="w-6 h-6 text-white" />
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Counter and Download */}
           <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex items-center justify-between z-20">
@@ -258,6 +342,4 @@ export function MemoryGallery({ media, allowDownloads, title }: MemoryGalleryPro
       `}</style>
     </div>
   );
-};
-
-export default MemoryGallery;
+}

@@ -39,7 +39,7 @@ const navItems: NavItem[] = [
     description: 'Overview and analytics',
   },
   {
-    href: '/admin/admin/analytics',
+    href: '/admin/analytics',
     label: 'Analytics',
     icon: BarChart2,
     description: 'View memories insights',

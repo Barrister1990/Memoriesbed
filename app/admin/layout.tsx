@@ -28,7 +28,7 @@ interface NavItem {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   description: string;
-  badge?: string; // Optional badge property
+  badge?: string; 
 }
 
 const navItems: NavItem[] = [

@@ -69,8 +69,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@livingmemories', // Replace with your Twitter handle
-    creator: '@livingmemories', // Replace with your Twitter handle
+    site: '@memoriesbed', // Replace with your Twitter handle
+    creator: '@memoriesbed', // Replace with your Twitter handle
     title: 'Memories Bed - Preserve and Share Your Precious Moments',
     description: 'Secure digital memorial service where your precious memories are safely stored and accessible remotely through QR codes and digital frames.',
     images: ['/twitter-image.jpg'], // Create this image (1200x600px recommended)
@@ -111,21 +111,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Preload critical fonts */}
-        <link
-          rel="preload"
-          href="/fonts/inter-var.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/playfair-display-var.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
         
         {/* Favicon and app icons */}
         <link rel="icon" href="/favicon.ico" sizes="any" />

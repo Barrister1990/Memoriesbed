@@ -11,7 +11,7 @@ const contactMethods = [
     title: 'WhatsApp Chat',
     details: 'Quick & Easy Support',
     description: 'Get instant help via WhatsApp',
-    action: () => window.open('https://wa.me/1234567890?text=Hello! I need help with Memories Bed', '_blank'),
+    action: () => window.open('https://wa.me/0503900597?text=Hello! I need help with Memories Bed', '_blank'),
     gradient: 'from-green-500 to-emerald-500',
     bgGradient: 'from-green-50 to-emerald-50',
     buttonText: 'Chat Now',
@@ -20,9 +20,9 @@ const contactMethods = [
   {
     icon: Phone,
     title: 'Call Us Direct',
-    details: '1-800-MEMORIES',
+    details: '0503900597',
     description: 'Speak with our support team',
-    action: () => window.open('tel:+18006366645', '_self'),
+    action: () => window.open('tel:+233503900597', '_self'),
     gradient: 'from-blue-500 to-cyan-500',
     bgGradient: 'from-blue-50 to-cyan-50',
     buttonText: 'Call Now',
@@ -249,7 +249,7 @@ export function ContactSection() {
                 <div className="flex items-center space-x-3">
                   <Phone className="w-4 h-4 text-purple-300" />
                   <span className="text-gray-300 text-sm sm:text-base">
-                    1-800-MEMORIES
+                    0503900597
                   </span>
                 </div>
                 <div className="flex items-center space-x-3">

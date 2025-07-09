@@ -60,7 +60,7 @@ export function HeroSection() {
             className="absolute inset-0 w-full h-full object-cover"
           >
             <source src="https://nwxypbgsjdgplrvqkhqo.supabase.co/storage/v1/object/public/uploads//hero-background2.MP4" type="video/mp4" />
-            <source src="/videos/hero-background.webm" type="video/webm" />
+          
             {/* Fallback gradient background if video fails to load */}
             <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-800" />
           </video>

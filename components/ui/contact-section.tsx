@@ -11,7 +11,7 @@ const contactMethods = [
     title: 'WhatsApp Chat',
     details: 'Quick & Easy Support',
     description: 'Get instant help via WhatsApp',
-    action: () => window.open('https://wa.me/0503900597?text=Hello! I need help with Memories Bed', '_blank'),
+    action: () => window.open('https://wa.me/+233503900597?text=Hello! I need help with Memories Bed', '_blank'),
     gradient: 'from-green-500 to-emerald-500',
     bgGradient: 'from-green-50 to-emerald-50',
     buttonText: 'Chat Now',

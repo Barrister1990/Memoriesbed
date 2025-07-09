@@ -8,6 +8,6 @@ export function generateMemoryCode(): string {
 }
 
 export function generatePublicUrl(code: string): string {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://memoriesbed.com';
   return `${baseUrl}/view/${code}`;
 }
